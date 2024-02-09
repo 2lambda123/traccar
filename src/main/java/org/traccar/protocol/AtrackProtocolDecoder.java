@@ -931,7 +931,7 @@ public class AtrackProtocolDecoder extends BaseProtocolDecoder {
 
             sendResponse(channel, remoteAddress, id, index);
 
-            if (prefix.equals("@R")) {
+            if ("@R".equals(prefix)) {
                 return decodePhoto(deviceSession, buf, id);
             } else {
                 return decodeBinary(deviceSession, buf);
