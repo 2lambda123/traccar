@@ -124,7 +124,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
         String type = values[index++];
 
-        if (!type.equals("Location") && !type.equals("Emergency") && !type.equals("Alert")) {
+        if (!"Location".equals(type) && !"Emergency".equals(type) && !"Alert".equals(type)) {
             return null;
         }
 
@@ -136,11 +136,11 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         Position position = new Position(getProtocolName());
         position.setDeviceId(deviceSession.getDeviceId());
 
-        if (type.equals("Emergency") || type.equals("Alert")) {
+        if ("Emergency".equals(type) || "Alert".equals(type)) {
             position.set(Position.KEY_ALARM, Position.ALARM_GENERAL);
         }
 
-        if (!type.equals("Alert") || getProtocolType(deviceSession.getDeviceId()) == 0) {
+        if (!"Alert".equals(type) || getProtocolType(deviceSession.getDeviceId()) == 0) {
             position.set(Position.KEY_VERSION_FW, values[index++]);
         }
 
@@ -157,7 +157,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         position.setSpeed(UnitsConverter.knotsFromKph(Double.parseDouble(values[index++])));
         position.setCourse(Double.parseDouble(values[index++]));
 
-        position.setValid(values[index++].equals("1"));
+        position.setValid("1".equals(values[index++]));
 
         if (getProtocolType(deviceSession.getDeviceId()) == 1) {
             position.set(Position.KEY_ODOMETER, Integer.parseInt(values[index++]));
@@ -224,7 +224,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
         String type = values[index++].substring(5);
 
-        if (!type.equals("STT") && !type.equals("ALT")) {
+        if (!"STT".equals(type) && !"ALT".equals(type)) {
             return null;
         }
 
@@ -263,7 +263,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         position.setNetwork(network);
 
         position.set(Position.KEY_BATTERY, Double.parseDouble(values[index++]));
-        position.set(Position.KEY_ARCHIVE, values[index++].equals("0") ? true : null);
+        position.set(Position.KEY_ARCHIVE, "0".equals(values[index++]) ? true : null);
         position.set(Position.KEY_INDEX, Integer.parseInt(values[index++]));
         position.set(Position.KEY_STATUS, Integer.parseInt(values[index++]));
 
@@ -282,7 +282,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
         position.set(Position.KEY_SATELLITES, Integer.parseInt(values[index++]));
 
-        position.setValid(values[index++].equals("1"));
+        position.setValid("1".equals(values[index++]));
 
         return position;
     }
@@ -293,8 +293,8 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
         String type = values[index++].substring(5);
 
-        if (!type.equals("STT") && !type.equals("EMG") && !type.equals("EVT")
-                && !type.equals("ALT") && !type.equals("UEX")) {
+        if (!"STT".equals(type) && !"EMG".equals(type) && !"EVT".equals(type)
+                && !"ALT".equals(type) && !"UEX".equals(type)) {
             return null;
         }
 
@@ -307,7 +307,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         position.setDeviceId(deviceSession.getDeviceId());
         position.set(Position.KEY_TYPE, type);
 
-        if (protocol.startsWith("ST3") || protocol.equals("ST500") || protocol.equals("ST600")) {
+        if (protocol.startsWith("ST3") || "ST500".equals(protocol) || "ST600".equals(protocol)) {
             index += 1; // model
         }
 
@@ -317,9 +317,9 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         position.setTime(dateFormat.parse(values[index++] + values[index++]));
 
-        if (!protocol.equals("ST500")) {
+        if (!"ST500".equals(protocol)) {
             long cid = Long.parseLong(values[index++], 16);
-            if (protocol.equals("ST600")) {
+            if ("ST600".equals(protocol)) {
                 position.setNetwork(new Network(CellTower.from(
                         Integer.parseInt(values[index++]), Integer.parseInt(values[index++]),
                         Integer.parseInt(values[index++], 16), cid, Integer.parseInt(values[index++]))));
@@ -333,7 +333,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
         position.set(Position.KEY_SATELLITES, Integer.parseInt(values[index++]));
 
-        position.setValid(values[index++].equals("1"));
+        position.setValid("1".equals(values[index++]));
 
         position.set(Position.KEY_ODOMETER, Integer.parseInt(values[index++]));
         position.set(Position.KEY_POWER, Double.parseDouble(values[index++]));
@@ -428,7 +428,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
                 position.set(Position.KEY_BATTERY, Double.parseDouble(values[index++]));
             }
 
-            if (index < values.length && values[index++].equals("0")) {
+            if (index < values.length && "0".equals(values[index++])) {
                 position.set(Position.KEY_ARCHIVE, true);
             }
 
@@ -446,7 +446,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
             if (values.length - index >= 2) {
                 String driverUniqueId = values[index++];
-                if (values[index++].equals("1") && !driverUniqueId.isEmpty()) {
+                if ("1".equals(values[index++]) && !driverUniqueId.isEmpty()) {
                     position.set(Position.KEY_DRIVER_UNIQUE_ID, driverUniqueId);
                 }
             }
@@ -473,7 +473,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
 
         String type = values[index++];
 
-        if (!type.equals("STT") && !type.equals("ALT") && !type.equals("BLE") && !type.equals("RES")) {
+        if (!"STT".equals(type) && !"ALT".equals(type) && !"BLE".equals(type) && !"RES".equals(type)) {
             return null;
         }
 
@@ -486,7 +486,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         position.setDeviceId(deviceSession.getDeviceId());
         position.set(Position.KEY_TYPE, type);
 
-        if (type.equals("RES")) {
+        if ("RES".equals(type)) {
             getLastLocation(position, null);
             position.set(
                     Position.KEY_RESULT,
@@ -495,7 +495,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
         }
 
         int mask;
-        if (type.equals("BLE")) {
+        if ("BLE".equals(type)) {
             mask = 0b1100000110110;
         } else {
             mask = Integer.parseInt(values[index++], 16);
@@ -509,7 +509,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
             position.set(Position.KEY_VERSION_FW, values[index++]);
         }
 
-        if (BitUtil.check(mask, 3) && values[index++].equals("0")) {
+        if (BitUtil.check(mask, 3) && "0".equals(values[index++])) {
             position.set(Position.KEY_ARCHIVE, true);
         }
 
@@ -548,7 +548,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
             position.setLongitude(Double.parseDouble(values[index++]));
         }
 
-        if (type.equals("BLE")) {
+        if ("BLE".equals(type)) {
 
             position.setValid(true);
 
@@ -579,7 +579,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
             }
 
             if (BitUtil.check(mask, 16)) {
-                position.setValid(values[index++].equals("1"));
+                position.setValid("1".equals(values[index++]));
             }
 
             if (BitUtil.check(mask, 17)) {
@@ -592,7 +592,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
                 position.set(Position.KEY_OUTPUT, Integer.parseInt(values[index++]));
             }
 
-            if (type.equals("ALT")) {
+            if ("ALT".equals(type)) {
                 if (BitUtil.check(mask, 19)) {
                     int alertId = Integer.parseInt(values[index++]);
                     position.set(Position.KEY_ALARM, decodeAlert(alertId));
@@ -859,7 +859,7 @@ public class SuntechProtocolDecoder extends BaseProtocolDecoder {
             String[] values = buf.toString(StandardCharsets.US_ASCII).split(";", -1);
             prefix = values[0];
 
-            if (prefix.equals("CRR")) {
+            if ("CRR".equals(prefix)) {
                 return decodeCrashReport(channel, remoteAddress, buf);
             } else if (prefix.length() < 5) {
                 universal = true;

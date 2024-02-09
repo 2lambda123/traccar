@@ -233,7 +233,7 @@ public class FifotrackProtocolDecoder extends BaseProtocolDecoder {
 
         if (parser.hasNext(5)) {
 
-            position.setValid(parser.next().equals("A"));
+            position.setValid("A".equals(parser.next()));
             position.setFixTime(position.getDeviceTime());
             position.set(Position.KEY_SATELLITES, parser.nextInt());
             position.setSpeed(UnitsConverter.knotsFromKph(parser.nextInt()));
@@ -282,7 +282,7 @@ public class FifotrackProtocolDecoder extends BaseProtocolDecoder {
 
         position.setTime(parser.nextDateTime());
 
-        position.setValid(parser.next().equals("A"));
+        position.setValid("A".equals(parser.next()));
         position.setLatitude(parser.nextDouble());
         position.setLongitude(parser.nextDouble());
         position.setSpeed(UnitsConverter.knotsFromKph(parser.nextInt()));
@@ -361,7 +361,7 @@ public class FifotrackProtocolDecoder extends BaseProtocolDecoder {
 
             return decodeResult(channel, remoteAddress, buf.toString(StandardCharsets.US_ASCII));
 
-        } else if (type.equals("D05")) {
+        } else if ("D05".equals(type)) {
 
             String sentence = buf.toString(StandardCharsets.US_ASCII);
             Parser parser = new Parser(PATTERN_PHOTO, sentence);
@@ -373,7 +373,7 @@ public class FifotrackProtocolDecoder extends BaseProtocolDecoder {
                 requestPhoto(channel, remoteAddress, imei, photoId);
             }
 
-        } else if (type.equals("D06")) {
+        } else if ("D06".equals(type)) {
 
             if (photo == null) {
                 return null;
@@ -403,7 +403,7 @@ public class FifotrackProtocolDecoder extends BaseProtocolDecoder {
                 }
             }
 
-        } else if (type.equals("A03")) {
+        } else if ("A03".equals(type)) {
 
             return decodeLocationNew(channel, remoteAddress, buf.toString(StandardCharsets.US_ASCII));
 

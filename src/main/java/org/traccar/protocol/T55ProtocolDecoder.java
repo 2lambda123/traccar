@@ -189,7 +189,7 @@ public class T55ProtocolDecoder extends BaseProtocolDecoder {
         DateBuilder dateBuilder = new DateBuilder()
                 .setTime(parser.nextInt(0), parser.nextInt(0), parser.nextInt(0));
 
-        position.setValid(parser.next().equals("A"));
+        position.setValid("A".equals(parser.next()));
         position.setLatitude(parser.nextCoordinate());
         position.setLongitude(parser.nextCoordinate());
         position.setSpeed(parser.nextDouble(0));
@@ -207,7 +207,7 @@ public class T55ProtocolDecoder extends BaseProtocolDecoder {
             }
             position.setDeviceId(deviceSession.getDeviceId());
 
-            position.set(Position.KEY_IGNITION, parser.hasNext() && parser.next().equals("1"));
+            position.set(Position.KEY_IGNITION, parser.hasNext() && "1".equals(parser.next()));
             position.set(Position.KEY_FUEL_LEVEL, parser.nextInt(0));
             position.set(Position.KEY_BATTERY, parser.nextInt());
         }
@@ -260,7 +260,7 @@ public class T55ProtocolDecoder extends BaseProtocolDecoder {
         position.setDeviceId(deviceSession.getDeviceId());
 
         position.setTime(new Date());
-        position.setValid(parser.next().equals("A"));
+        position.setValid("A".equals(parser.next()));
         position.setLatitude(parser.nextCoordinate());
         position.setLongitude(parser.nextCoordinate());
         position.setSpeed(parser.nextDouble(0));
@@ -281,7 +281,7 @@ public class T55ProtocolDecoder extends BaseProtocolDecoder {
 
         position.setTime(parser.nextDateTime());
 
-        position.setValid(parser.next().equals("A"));
+        position.setValid("A".equals(parser.next()));
         position.setLatitude(parser.nextDouble(0));
         position.setLongitude(parser.nextDouble(0));
         position.setSpeed(parser.nextDouble(0));
@@ -333,7 +333,7 @@ public class T55ProtocolDecoder extends BaseProtocolDecoder {
         position.setLongitude(parser.nextDouble());
         position.setSpeed(UnitsConverter.knotsFromKph(parser.nextInt()));
         position.setCourse(parser.nextInt());
-        position.setValid(parser.next().equals("A"));
+        position.setValid("A".equals(parser.next()));
 
         position.set(Position.KEY_IGNITION, parser.nextInt() > 0);
 
@@ -380,7 +380,7 @@ public class T55ProtocolDecoder extends BaseProtocolDecoder {
         position.setLatitude(parser.nextCoordinate());
         position.setLongitude(parser.nextCoordinate());
         position.setAltitude(parser.nextDouble());
-        position.setValid(!parser.next().equals("NF"));
+        position.setValid(!"NF".equals(parser.next()));
         position.setAccuracy(parser.nextDouble());
         position.setSpeed(UnitsConverter.knotsFromKph(parser.nextDouble()));
         position.setCourse(parser.nextDouble());
